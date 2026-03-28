@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Target } from 'lucide-react';
-import { EXPENSE_CATEGORIES } from '../utils/constants';
+import { EXPENSE_CATEGORIES, baseToForm, formToBase } from '../utils/constants';
 import toast from 'react-hot-toast';
 import { budgetAPI } from '../api';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ export default function BudgetForm({ onClose, onSuccess, month, year }) {
 
     setLoading(true);
     try {
-      await budgetAPI.upsert({ ...form, limit: Number(form.limit), month, year });
+      await budgetAPI.upsert({ ...form, limit: formToBase(Number(form.limit)), month, year });
       toast.success(t('budget.form.saveSuccess'));
       onSuccess?.();
       onClose();
@@ -64,9 +64,9 @@ export default function BudgetForm({ onClose, onSuccess, month, year }) {
               className="form-input"
               value={form.limit}
               onChange={(e) => setForm((p) => ({ ...p, limit: e.target.value }))}
-              placeholder="0.00"
+              placeholder="0"
               min="1"
-              step="1"
+              step="any"
               required
             />
           </div>

@@ -9,6 +9,7 @@ import {
   Sun,
   Moon,
   DollarSign,
+  Award,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -16,6 +17,7 @@ const navLinks = [
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard },
   { to: '/transactions', labelKey: 'nav.transactions', icon: ArrowLeftRight },
   { to: '/budgets', labelKey: 'nav.budgets', icon: Target },
+  { to: '/goals', labelKey: 'nav.goals', icon: Award },
 ];
 
 export default function Navbar() {

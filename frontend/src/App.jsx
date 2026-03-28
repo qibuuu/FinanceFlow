@@ -9,6 +9,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import TransactionsPage from './pages/TransactionsPage';
 import BudgetPage from './pages/BudgetPage';
+import GoalsPage from './pages/GoalsPage';
 
 // Protected route wrapper
 function ProtectedRoute({ children }) {
@@ -96,6 +97,17 @@ function AppRoutes() {
           <ProtectedRoute>
             <AppLayout>
               <BudgetPage />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/goals"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <GoalsPage />
             </AppLayout>
           </ProtectedRoute>
         }

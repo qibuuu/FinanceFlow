@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Plus } from 'lucide-react';
-import { INCOME_CATEGORIES, EXPENSE_CATEGORIES, formatDate } from '../utils/constants';
+import { INCOME_CATEGORIES, EXPENSE_CATEGORIES, formatDate, baseToForm, formToBase } from '../utils/constants';
 import toast from 'react-hot-toast';
 import { transactionAPI } from '../api';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
     if (editData) {
       setForm({
         type: editData.type,
-        amount: editData.amount,
+        amount: baseToForm(editData.amount),
         category: editData.category,
         description: editData.description || '',
         date: new Date(editData.date).toISOString().split('T')[0],
@@ -49,11 +49,12 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
 
     setLoading(true);
     try {
+      const payload = { ...form, amount: formToBase(Number(form.amount)) };
       if (editData) {
-        await transactionAPI.update(editData._id, form);
+        await transactionAPI.update(editData._id, payload);
         toast.success(t('transaction.form.updateSuccess'));
       } else {
-        await transactionAPI.create(form);
+        await transactionAPI.create(payload);
         toast.success(t('transaction.form.addSuccess'));
       }
       onSuccess?.();
@@ -128,8 +129,8 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
               className="form-input"
               value={form.amount}
               onChange={handleChange}
-              placeholder="0.00"
-              step="0.01"
+              placeholder="0"
+              step="any"
               min="0.01"
               required
             />

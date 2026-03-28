@@ -3,6 +3,7 @@
     "dashboard": "Dashboard",
     "transactions": "Transactions",
     "budgets": "Budgets",
+    "goals": "Goals",
     "financeFlow": "FinanceFlow",
     "switchToLight": "Switch to light mode",
     "switchToDark": "Switch to dark mode",
@@ -171,5 +172,38 @@
     "Entertainment": "Entertainment",
     "Education": "Education",
     "Other Expense": "Other Expense"
+  },
+  "goals": {
+    "title": "Financial Goals",
+    "subtitle": "Track and achieve your savings targets",
+    "addGoal": "Add Goal",
+    "empty": "No goals set yet",
+    "emptyDesc": "Set your first financial target to start saving!",
+    "completedLabel": "COMPLETED",
+    "deadline": "Target date:",
+    "edit": "Edit",
+    "delete": "Delete",
+    "fund": "Fund Goal",
+    "loadFailed": "Failed to load goals",
+    "deleteConfirm": "Delete this goal?",
+    "deleteSuccess": "Goal deleted!",
+    "deleteFailed": "Failed to delete",
+    "form": {
+      "fundTitle": "Fund Goal",
+      "editTitle": "Edit Goal",
+      "addTitle": "Create Goal",
+      "amountToAdd": "Amount to add",
+      "goalName": "Goal Name",
+      "namePlaceholder": "e.g. New Car, Vacation",
+      "targetAmount": "Target Amount",
+      "deadline": "Deadline (optional)",
+      "submitBtn": "Confirm",
+      "errAmount": "Invalid amount",
+      "errRequired": "Required fields missing",
+      "fundSuccess": "Goal funded!",
+      "updateSuccess": "Goal updated!",
+      "addSuccess": "Goal created!",
+      "error": "Something went wrong"
+    }
   }
 }

@@ -1,4 +1,5 @@
 // Utility constants and formatters
+import i18n from '../i18n';
 
 export const CATEGORIES = [
   'Food & Dining',
@@ -45,12 +46,36 @@ export const CATEGORY_COLORS = {
   'Other': '#94a3b8',
 };
 
-export const formatCurrency = (amount, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', {
+export const RATE_USD_TO_VND = 26000;
+
+export const baseToForm = (amount) => {
+  if (amount == null) return '';
+  const isVi = i18n.language?.startsWith('vi');
+  return isVi ? amount * RATE_USD_TO_VND : amount;
+};
+
+export const formToBase = (amount) => {
+  if (amount == null) return 0;
+  const isVi = i18n.language?.startsWith('vi');
+  return isVi ? amount / RATE_USD_TO_VND : amount;
+};
+
+export const formatCurrency = (amount) => {
+  const lang = i18n.language || 'en';
+  const isVi = lang.startsWith('vi');
+  
+  const currency = isVi ? 'VND' : 'USD';
+  const locale = isVi ? 'vi-VN' : 'en-US';
+  const digits = isVi ? 0 : 2;
+
+  const displayAmount = isVi ? amount * RATE_USD_TO_VND : amount;
+
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
-    minimumFractionDigits: 2,
-  }).format(amount);
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(displayAmount);
 };
 
 export const formatDate = (date) => {

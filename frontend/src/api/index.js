@@ -24,3 +24,10 @@ export const budgetAPI = {
   upsert: (data) => api.post('/budgets', data),
   delete: (id) => api.delete(`/budgets/${id}`),
 };
+
+export const goalAPI = {
+  getAll: () => api.get('/goals'),
+  create: (data) => api.post('/goals', data),
+  update: (id, data) => api.put(`/goals/${id}`, data),
+  delete: (id) => api.delete(`/goals/${id}`),
+};

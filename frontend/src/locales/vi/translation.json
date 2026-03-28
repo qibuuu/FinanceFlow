@@ -3,6 +3,7 @@
     "dashboard": "Bảng điều khiển",
     "transactions": "Giao dịch",
     "budgets": "Ngân sách",
+    "goals": "Mục tiêu",
     "financeFlow": "FinanceFlow",
     "switchToLight": "Chế độ nền sáng",
     "switchToDark": "Chế độ nền tối",
@@ -167,5 +168,38 @@
     "Entertainment": "Giải trí",
     "Education": "Giáo dục",
     "Other Expense": "Chi phí khác"
+  },
+  "goals": {
+    "title": "Mục tiêu tài chính",
+    "subtitle": "Theo dõi và tích lũy để đạt được dự định của bạn",
+    "addGoal": "Thêm Mục tiêu",
+    "empty": "Chưa có mục tiêu nào",
+    "emptyDesc": "Hãy thiết lập mục tiêu tài chính đầu tiên để bắt đầu tích lũy!",
+    "completedLabel": "ĐÃ ĐẠT",
+    "deadline": "Hạn chót:",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "fund": "Nạp tiền",
+    "loadFailed": "Tải danh sách thất bại",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa mục tiêu này?",
+    "deleteSuccess": "Đã xóa mục tiêu!",
+    "deleteFailed": "Xóa thất bại",
+    "form": {
+      "fundTitle": "Nạp tiền vào quỹ",
+      "editTitle": "Sửa Mục tiêu",
+      "addTitle": "Tạo Mục tiêu mới",
+      "amountToAdd": "Số tiền cần nạp",
+      "goalName": "Tên mục tiêu",
+      "namePlaceholder": "VD: Mua xe, Đám cưới...",
+      "targetAmount": "Số tiền dự kiến",
+      "deadline": "Hạn chót (không bắt buộc)",
+      "submitBtn": "Xác nhận",
+      "errAmount": "Số tiền không hợp lệ",
+      "errRequired": "Vui lòng nhập đầy đủ thông tin",
+      "fundSuccess": "Đã nạp tiền vào quỹ!",
+      "updateSuccess": "Đã cập nhật mục tiêu!",
+      "addSuccess": "Đã tạo mục tiêu!",
+      "error": "Có lỗi xảy ra"
+    }
   }
 }
