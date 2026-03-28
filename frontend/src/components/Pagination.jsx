@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Pagination({ pagination, onPageChange }) {
+  const { t } = useTranslation();
   const { page, totalPages, total, limit } = pagination;
   const startItem = (page - 1) * limit + 1;
   const endItem = Math.min(page * limit, total);
@@ -17,7 +19,7 @@ export default function Pagination({ pagination, onPageChange }) {
       }}
     >
       <span>
-        Showing {startItem}–{endItem} of {total} transactions
+        {t('pagination.showing', { start: startItem, end: endItem, total })}
       </span>
       <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
         <button

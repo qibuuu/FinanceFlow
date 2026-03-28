@@ -3,6 +3,7 @@ import { X, Plus } from 'lucide-react';
 import { INCOME_CATEGORIES, EXPENSE_CATEGORIES, formatDate } from '../utils/constants';
 import toast from 'react-hot-toast';
 import { transactionAPI } from '../api';
+import { useTranslation } from 'react-i18next';
 
 const defaultForm = {
   type: 'expense',
@@ -13,6 +14,7 @@ const defaultForm = {
 };
 
 export default function TransactionForm({ onClose, onSuccess, editData }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState(defaultForm);
   const [loading, setLoading] = useState(false);
 
@@ -42,22 +44,22 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.category) return toast.error('Please select a category');
-    if (!form.amount || Number(form.amount) <= 0) return toast.error('Please enter a valid amount');
+    if (!form.category) return toast.error(t('transaction.form.errCategory'));
+    if (!form.amount || Number(form.amount) <= 0) return toast.error(t('transaction.form.errAmount'));
 
     setLoading(true);
     try {
       if (editData) {
         await transactionAPI.update(editData._id, form);
-        toast.success('Transaction updated!');
+        toast.success(t('transaction.form.updateSuccess'));
       } else {
         await transactionAPI.create(form);
-        toast.success('Transaction added!');
+        toast.success(t('transaction.form.addSuccess'));
       }
       onSuccess?.();
       onClose();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Something went wrong');
+      toast.error(err.response?.data?.message || t('transaction.form.error'));
     } finally {
       setLoading(false);
     }
@@ -72,7 +74,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 700 }}>
-            {editData ? 'Edit Transaction' : 'Add Transaction'}
+            {editData ? t('transaction.editTransaction') : t('transaction.addTransaction')}
           </h2>
           <button onClick={onClose} className="btn-ghost" style={{ padding: '0.4rem' }}>
             <X size={18} />
@@ -110,7 +112,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
                       : 'var(--text-secondary)',
                 }}
               >
-                {t.charAt(0).toUpperCase() + t.slice(1)}
+                {t('transaction.' + t, t.charAt(0).toUpperCase() + t.slice(1))}
               </button>
             ))}
           </div>
@@ -118,7 +120,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
           {/* Amount */}
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.4rem', display: 'block' }}>
-              Amount ($)
+              {t('transaction.form.amount')}
             </label>
             <input
               type="number"
@@ -136,7 +138,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
           {/* Category */}
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.4rem', display: 'block' }}>
-              Category
+              {t('transaction.table.category')}
             </label>
             <select
               name="category"
@@ -146,9 +148,9 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
               required
               style={{ cursor: 'pointer' }}
             >
-              <option value="">Select category...</option>
+              <option value="">{t('budget.form.selectCategory')}</option>
               {categories.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c}>{t(`category.${c}`, c)}</option>
               ))}
             </select>
           </div>
@@ -156,7 +158,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
           {/* Description */}
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.4rem', display: 'block' }}>
-              Description (optional)
+              {t('transaction.form.description')}
             </label>
             <input
               type="text"
@@ -164,7 +166,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
               className="form-input"
               value={form.description}
               onChange={handleChange}
-              placeholder="What was this for?"
+              placeholder={t('transaction.form.descPlaceholder')}
               maxLength={200}
             />
           </div>
@@ -172,7 +174,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
           {/* Date */}
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.4rem', display: 'block' }}>
-              Date
+              {t('transaction.form.date')}
             </label>
             <input
               type="date"
@@ -187,7 +189,7 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
           {/* Submit */}
           <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '0.5rem' }}>
             <Plus size={16} />
-            {loading ? 'Saving...' : editData ? 'Update Transaction' : 'Add Transaction'}
+            {loading ? t('transaction.form.saving') : editData ? t('transaction.form.updateBtn') : t('transaction.addTransaction')}
           </button>
         </form>
       </div>

@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { DollarSign, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
@@ -16,10 +18,10 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(form.email, form.password);
-      toast.success('Welcome back!');
+      toast.success(t('auth.loginSuccess'));
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed');
+      toast.error(err.response?.data?.message || t('auth.loginFailed'));
     } finally {
       setLoading(false);
     }
@@ -84,14 +86,14 @@ export default function LoginPage() {
             FinanceFlow
           </h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '0.9rem' }}>
-            Sign in to manage your finances
+            {t('auth.loginDesc')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Email Address
+              {t('auth.email')}
             </label>
             <input
               type="email"
@@ -99,7 +101,7 @@ export default function LoginPage() {
               id="email"
               value={form.email}
               onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-              placeholder="you@example.com"
+              placeholder={t('auth.emailPlaceholder')}
               required
               autoComplete="email"
             />
@@ -107,7 +109,7 @@ export default function LoginPage() {
 
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Password
+              {t('auth.password')}
             </label>
             <div style={{ position: 'relative' }}>
               <input
@@ -116,7 +118,7 @@ export default function LoginPage() {
                 id="password"
                 value={form.password}
                 onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
-                placeholder="••••••••"
+                placeholder={t('auth.passwordPlaceholder')}
                 required
                 autoComplete="current-password"
                 style={{ paddingRight: '3rem' }}
@@ -143,14 +145,14 @@ export default function LoginPage() {
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '0.5rem', padding: '0.75rem', fontSize: '0.95rem' }}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? t('auth.signingIn') : t('auth.login')}
           </button>
         </form>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          Don't have an account?{' '}
+          {t('auth.noAccount')}{' '}
           <Link to="/register" style={{ color: '#6366f1', fontWeight: 600, textDecoration: 'none' }}>
-            Create one
+            {t('auth.createOne')}
           </Link>
         </p>
       </div>

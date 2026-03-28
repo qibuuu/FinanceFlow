@@ -1,31 +1,32 @@
 import { TrendingUp, TrendingDown, Wallet, Activity } from 'lucide-react';
 import { formatCurrency } from '../utils/constants';
+import { useTranslation } from 'react-i18next';
 
 const cards = [
   {
     key: 'balance',
-    label: 'Total Balance',
+    labelKey: 'summary.totalBalance',
     icon: Wallet,
     color: '#6366f1',
     gradient: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.1))',
   },
   {
     key: 'income',
-    label: 'Monthly Income',
+    labelKey: 'summary.monthlyIncome',
     icon: TrendingUp,
     color: '#10b981',
     gradient: 'linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05))',
   },
   {
     key: 'expense',
-    label: 'Monthly Expenses',
+    labelKey: 'summary.monthlyExpenses',
     icon: TrendingDown,
     color: '#ef4444',
     gradient: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.05))',
   },
   {
     key: 'monthBalance',
-    label: 'Monthly Net',
+    labelKey: 'summary.monthlyNet',
     icon: Activity,
     color: '#f59e0b',
     gradient: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.05))',
@@ -33,6 +34,7 @@ const cards = [
 ];
 
 export default function SummaryCards({ summary, loading }) {
+  const { t } = useTranslation();
   const values = {
     balance: summary?.overall?.balance ?? 0,
     income: summary?.currentMonth?.income ?? 0,
@@ -48,7 +50,7 @@ export default function SummaryCards({ summary, loading }) {
         gap: '1rem',
       }}
     >
-      {cards.map(({ key, label, icon: Icon, color, gradient }) => {
+      {cards.map(({ key, labelKey, icon: Icon, color, gradient }) => {
         const value = values[key];
         const isNegative = value < 0;
         return (
@@ -89,7 +91,7 @@ export default function SummaryCards({ summary, loading }) {
                   }}
                 >
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                    {label}
+                    {t(labelKey)}
                   </span>
                   <div
                     style={{

@@ -10,17 +10,19 @@ import {
   Moon,
   DollarSign,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const navLinks = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/transactions', label: 'Transactions', icon: ArrowLeftRight },
-  { to: '/budgets', label: 'Budgets', icon: Target },
+  { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard },
+  { to: '/transactions', labelKey: 'nav.transactions', icon: ArrowLeftRight },
+  { to: '/budgets', labelKey: 'nav.budgets', icon: Target },
 ];
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
+  const { t, i18n } = useTranslation();
 
   return (
     <nav
@@ -63,13 +65,13 @@ export default function Navbar() {
             style={{ fontWeight: 700, fontSize: '1.1rem' }}
             className="gradient-text"
           >
-            FinanceFlow
+            {t('nav.financeFlow', 'FinanceFlow')}
           </span>
         </Link>
 
         {/* Nav links */}
         <div style={{ display: 'flex', gap: '0.25rem' }}>
-          {navLinks.map(({ to, label, icon: Icon }) => {
+          {navLinks.map(({ to, labelKey, icon: Icon }) => {
             const active = location.pathname === to;
             return (
               <Link
@@ -102,7 +104,7 @@ export default function Navbar() {
                 }}
               >
                 <Icon size={16} />
-                {label}
+                {t(labelKey)}
               </Link>
             );
           })}
@@ -133,12 +135,31 @@ export default function Navbar() {
             </span>
           </div>
 
+          {/* Language toggle */}
+          <select
+            value={i18n.language?.split('-')[0] || 'en'}
+            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            className="btn-ghost"
+            style={{
+              padding: '0.4rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+              background: 'transparent',
+              color: 'var(--text-primary)',
+              outline: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            <option value="en">EN</option>
+            <option value="vi">VI</option>
+          </select>
+
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
             className="btn-ghost"
             style={{ padding: '0.5rem', borderRadius: '8px', border: '1px solid var(--border)' }}
-            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={t(isDark ? 'nav.switchToLight' : 'nav.switchToDark')}
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
@@ -148,10 +169,10 @@ export default function Navbar() {
             onClick={logout}
             className="btn-ghost"
             style={{ padding: '0.5rem 0.875rem', fontSize: '0.8rem' }}
-            title="Logout"
+            title={t('nav.logout')}
           >
             <LogOut size={14} />
-            Logout
+            {t('nav.logout')}
           </button>
         </div>
       </div>

@@ -6,8 +6,10 @@ import Pagination from '../components/Pagination';
 import { CATEGORIES } from '../utils/constants';
 import { Plus, Search, Download, Filter, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function TransactionsPage() {
+  const { t } = useTranslation();
   const [transactions, setTransactions] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 10, totalPages: 1 });
   const [loading, setLoading] = useState(true);
@@ -37,7 +39,7 @@ export default function TransactionsPage() {
       setTransactions(data.data);
       setPagination(data.pagination);
     } catch (err) {
-      toast.error('Failed to load transactions');
+      toast.error(t('transaction.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -48,13 +50,13 @@ export default function TransactionsPage() {
   }, [fetchTransactions]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this transaction?')) return;
+    if (!window.confirm(t('transaction.deleteConfirm'))) return;
     try {
       await transactionAPI.delete(id);
-      toast.success('Transaction deleted');
+      toast.success(t('transaction.deleteSuccess'));
       fetchTransactions();
     } catch {
-      toast.error('Failed to delete');
+      toast.error(t('transaction.deleteFailed'));
     }
   };
 
@@ -77,9 +79,9 @@ export default function TransactionsPage() {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      toast.success('CSV exported!');
+      toast.success(t('transaction.exportSuccess'));
     } catch {
-      toast.error('Export failed');
+      toast.error(t('transaction.exportFailed'));
     } finally {
       setExporting(false);
     }
@@ -96,15 +98,15 @@ export default function TransactionsPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>Transactions</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>{t('transaction.title')}</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-            {pagination.total} total transactions
+            {t('transaction.totalCount', { count: pagination.total })}
           </p>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button onClick={handleExport} className="btn-ghost" disabled={exporting}>
             <Download size={15} />
-            {exporting ? 'Exporting...' : 'Export CSV'}
+            {exporting ? t('transaction.exporting') : t('transaction.exportCSV')}
           </button>
           <button
             id="add-transaction-btn"
@@ -112,7 +114,7 @@ export default function TransactionsPage() {
             className="btn-primary"
           >
             <Plus size={16} />
-            Add Transaction
+            {t('transaction.addTransaction')}
           </button>
         </div>
       </div>
@@ -126,7 +128,7 @@ export default function TransactionsPage() {
             <input
               type="text"
               className="form-input"
-              placeholder="Search description..."
+              placeholder={t('transaction.searchPlaceholder')}
               value={filters.search}
               onChange={(e) => setFilters((p) => ({ ...p, search: e.target.value, page: 1 }))}
               style={{ paddingLeft: '2.25rem' }}
@@ -140,9 +142,9 @@ export default function TransactionsPage() {
             onChange={(e) => setFilters((p) => ({ ...p, type: e.target.value, page: 1 }))}
             style={{ width: 'auto', cursor: 'pointer' }}
           >
-            <option value="">All Types</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="">{t('transaction.allTypes')}</option>
+            <option value="income">{t('transaction.income')}</option>
+            <option value="expense">{t('transaction.expense')}</option>
           </select>
 
           {/* Category filter */}
@@ -152,8 +154,8 @@ export default function TransactionsPage() {
             onChange={(e) => setFilters((p) => ({ ...p, category: e.target.value, page: 1 }))}
             style={{ width: 'auto', cursor: 'pointer' }}
           >
-            <option value="">All Categories</option>
-            {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            <option value="">{t('transaction.allCategories')}</option>
+            {CATEGORIES.map((c) => <option key={c} value={c}>{t(`category.${c}`, c)}</option>)}
           </select>
 
           {/* Date range */}
@@ -178,7 +180,7 @@ export default function TransactionsPage() {
           {hasActiveFilters && (
             <button onClick={resetFilters} className="btn-ghost" style={{ padding: '0.625rem 0.875rem' }}>
               <X size={14} />
-              Clear
+              {t('transaction.clear')}
             </button>
           )}
         </div>

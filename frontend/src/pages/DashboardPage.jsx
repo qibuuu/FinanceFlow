@@ -4,8 +4,10 @@ import SummaryCards from '../components/SummaryCards';
 import { MonthlyBarChart, CategoryPieChart } from '../components/Charts';
 import { formatDate, formatCurrency, CATEGORY_COLORS } from '../utils/constants';
 import { RefreshCw, TrendingUp, PieChart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
@@ -28,8 +30,8 @@ export default function DashboardPage() {
   }, [fetchSummary]);
 
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+    t('dashboard.months.1'), t('dashboard.months.2'), t('dashboard.months.3'), t('dashboard.months.4'), t('dashboard.months.5'), t('dashboard.months.6'),
+    t('dashboard.months.7'), t('dashboard.months.8'), t('dashboard.months.9'), t('dashboard.months.10'), t('dashboard.months.11'), t('dashboard.months.12'),
   ];
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
@@ -38,8 +40,8 @@ export default function DashboardPage() {
       {/* Page header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>Dashboard</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Your financial overview at a glance</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>{t('dashboard.title')}</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{t('dashboard.subtitle')}</p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -82,7 +84,7 @@ export default function DashboardPage() {
         <div className="glass-card" style={{ padding: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
             <TrendingUp size={18} color="#6366f1" />
-            <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>Income vs Expenses (6 months)</h2>
+            <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>{t('dashboard.incomeVsExpenses')}</h2>
           </div>
           <MonthlyBarChart monthlyTrend={summary?.monthlyTrend} />
         </div>
@@ -91,7 +93,7 @@ export default function DashboardPage() {
         <div className="glass-card" style={{ padding: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
             <PieChart size={18} color="#8b5cf6" />
-            <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>Expense Breakdown — {months[month - 1]}</h2>
+            <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>{t('dashboard.expenseBreakdown')} — {months[month - 1]}</h2>
           </div>
           <CategoryPieChart categoryBreakdown={summary?.categoryBreakdown} />
         </div>
@@ -100,7 +102,7 @@ export default function DashboardPage() {
       {/* Category list */}
       {summary?.categoryBreakdown?.length > 0 && (
         <div className="glass-card" style={{ padding: '1.5rem', marginTop: '1rem' }}>
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>Top Expense Categories</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>{t('dashboard.topCategories')}</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {summary.categoryBreakdown.slice(0, 6).map((cat) => {
               const maxVal = summary.categoryBreakdown[0]?.total || 1;

@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { DollarSign, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
@@ -14,18 +16,18 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
-      return toast.error('Passwords do not match');
+      return toast.error(t('auth.passwordMismatch'));
     }
     if (form.password.length < 6) {
-      return toast.error('Password must be at least 6 characters');
+      return toast.error(t('auth.passwordLength'));
     }
     setLoading(true);
     try {
       await register(form.name, form.email, form.password);
-      toast.success('Account created! Welcome to FinanceFlow 🎉');
+      toast.success(t('auth.registerSuccess'));
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Registration failed');
+      toast.error(err.response?.data?.message || t('auth.registerFailed'));
     } finally {
       setLoading(false);
     }
@@ -73,17 +75,17 @@ export default function RegisterPage() {
             <DollarSign size={28} color="white" />
           </div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }} className="gradient-text">
-            Create Account
+            {t('auth.createAccount')}
           </h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '0.9rem' }}>
-            Start managing your finances today
+            {t('auth.registerDesc')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Full Name
+              {t('auth.fullName')}
             </label>
             <input
               type="text"
@@ -91,7 +93,7 @@ export default function RegisterPage() {
               id="name"
               value={form.name}
               onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-              placeholder="John Doe"
+              placeholder={t('auth.namePlaceholder')}
               required
               autoComplete="name"
             />
@@ -99,7 +101,7 @@ export default function RegisterPage() {
 
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Email Address
+              {t('auth.email')}
             </label>
             <input
               type="email"
@@ -107,7 +109,7 @@ export default function RegisterPage() {
               id="email"
               value={form.email}
               onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-              placeholder="you@example.com"
+              placeholder={t('auth.emailPlaceholder')}
               required
               autoComplete="email"
             />
@@ -115,7 +117,7 @@ export default function RegisterPage() {
 
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Password
+              {t('auth.password')}
             </label>
             <div style={{ position: 'relative' }}>
               <input
@@ -124,7 +126,7 @@ export default function RegisterPage() {
                 id="password"
                 value={form.password}
                 onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
-                placeholder="Min. 6 characters"
+                placeholder={t('auth.passwordMin')}
                 required
                 autoComplete="new-password"
                 style={{ paddingRight: '3rem' }}
@@ -152,7 +154,7 @@ export default function RegisterPage() {
 
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Confirm Password
+              {t('auth.confirmPassword')}
             </label>
             <input
               type={showPw ? 'text' : 'password'}
@@ -160,21 +162,21 @@ export default function RegisterPage() {
               id="confirmPassword"
               value={form.confirmPassword}
               onChange={(e) => setForm((p) => ({ ...p, confirmPassword: e.target.value }))}
-              placeholder="Repeat password"
+              placeholder={t('auth.repeatPassword')}
               required
               autoComplete="new-password"
             />
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '0.5rem', padding: '0.75rem', fontSize: '0.95rem' }}>
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
           </button>
         </form>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          Already have an account?{' '}
+          {t('auth.alreadyHaveAccount')}{' '}
           <Link to="/login" style={{ color: '#6366f1', fontWeight: 600, textDecoration: 'none' }}>
-            Sign in
+            {t('auth.login')}
           </Link>
         </p>
       </div>

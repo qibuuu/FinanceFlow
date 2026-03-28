@@ -3,24 +3,26 @@ import { X, Target } from 'lucide-react';
 import { EXPENSE_CATEGORIES } from '../utils/constants';
 import toast from 'react-hot-toast';
 import { budgetAPI } from '../api';
+import { useTranslation } from 'react-i18next';
 
 export default function BudgetForm({ onClose, onSuccess, month, year }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState({ category: '', limit: '' });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.category) return toast.error('Select a category');
-    if (!form.limit || Number(form.limit) <= 0) return toast.error('Enter a valid limit');
+    if (!form.category) return toast.error(t('budget.form.selectCategoryErr'));
+    if (!form.limit || Number(form.limit) <= 0) return toast.error(t('budget.form.invalidLimitErr'));
 
     setLoading(true);
     try {
       await budgetAPI.upsert({ ...form, limit: Number(form.limit), month, year });
-      toast.success('Budget saved!');
+      toast.success(t('budget.form.saveSuccess'));
       onSuccess?.();
       onClose();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Error saving budget');
+      toast.error(err.response?.data?.message || t('budget.form.saveError'));
     } finally {
       setLoading(false);
     }
@@ -30,7 +32,7 @@ export default function BudgetForm({ onClose, onSuccess, month, year }) {
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="glass-card animate-slide-down" style={{ width: '100%', maxWidth: '420px', padding: '2rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Set Budget</h2>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{t('budget.form.title')}</h2>
           <button onClick={onClose} className="btn-ghost" style={{ padding: '0.4rem' }}>
             <X size={18} />
           </button>
@@ -39,7 +41,7 @@ export default function BudgetForm({ onClose, onSuccess, month, year }) {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Category
+              {t('budget.form.category')}
             </label>
             <select
               className="form-input"
@@ -48,14 +50,14 @@ export default function BudgetForm({ onClose, onSuccess, month, year }) {
               required
               style={{ cursor: 'pointer' }}
             >
-              <option value="">Select category...</option>
-              {EXPENSE_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              <option value="">{t('budget.form.selectCategory')}</option>
+              {EXPENSE_CATEGORIES.map((c) => <option key={c} value={c}>{t(`category.${c}`, c)}</option>)}
             </select>
           </div>
 
           <div>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              Monthly Limit ($)
+              {t('budget.form.monthlyLimit')}
             </label>
             <input
               type="number"
@@ -71,7 +73,7 @@ export default function BudgetForm({ onClose, onSuccess, month, year }) {
 
           <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '0.5rem' }}>
             <Target size={16} />
-            {loading ? 'Saving...' : 'Save Budget'}
+            {loading ? t('budget.form.saving') : t('budget.form.save')}
           </button>
         </form>
       </div>

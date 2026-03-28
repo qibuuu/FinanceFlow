@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
@@ -12,6 +13,7 @@ import BudgetPage from './pages/BudgetPage';
 // Protected route wrapper
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
+  const { t } = useTranslation();
 
   if (loading) {
     return (
@@ -36,7 +38,7 @@ function ProtectedRoute({ children }) {
               margin: '0 auto 1rem',
             }}
           />
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Loading...</p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{t('app.loading')}</p>
         </div>
       </div>
     );

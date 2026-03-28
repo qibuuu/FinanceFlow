@@ -1,11 +1,13 @@
 import { Pencil, Trash2 } from 'lucide-react';
 import { formatCurrency, formatDate, CATEGORY_COLORS } from '../utils/constants';
+import { useTranslation } from 'react-i18next';
 
 export default function TransactionTable({ transactions, onEdit, onDelete, loading }) {
+  const { t } = useTranslation();
   if (loading) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-        Loading transactions...
+        {t('transaction.loading')}
       </div>
     );
   }
@@ -24,8 +26,8 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
         }}
       >
         <span style={{ fontSize: '2rem' }}>📭</span>
-        <p style={{ fontWeight: 600, color: 'var(--text-primary)' }}>No transactions found</p>
-        <p style={{ fontSize: '0.875rem' }}>Add your first transaction to get started</p>
+        <p style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{t('transaction.noData')}</p>
+        <p style={{ fontSize: '0.875rem' }}>{t('transaction.noDataDesc')}</p>
       </div>
     );
   }
@@ -35,12 +37,12 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid var(--border)' }}>
-            {['Date', 'Description', 'Category', 'Type', 'Amount', 'Actions'].map((h) => (
+            {['date', 'description', 'category', 'type', 'amount', 'actions'].map((h) => (
               <th
                 key={h}
                 style={{
                   padding: '0.875rem 1rem',
-                  textAlign: h === 'Amount' || h === 'Actions' ? 'right' : 'left',
+                  textAlign: h === 'amount' || h === 'actions' ? 'right' : 'left',
                   color: 'var(--text-secondary)',
                   fontWeight: 500,
                   whiteSpace: 'nowrap',
@@ -49,7 +51,7 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
                   letterSpacing: '0.05em',
                 }}
               >
-                {h}
+                {t('transaction.table.' + h)}
               </th>
             ))}
           </tr>
@@ -95,12 +97,12 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
                     color: CATEGORY_COLORS[t.category] || '#94a3b8',
                   }}
                 >
-                  {t.category}
+                  {t('category.' + t.category, t.category)}
                 </span>
               </td>
               <td style={{ padding: '0.875rem 1rem' }}>
                 <span className={`badge badge-${t.type}`}>
-                  {t.type.charAt(0).toUpperCase() + t.type.slice(1)}
+                  {t('transaction.' + t.type)}
                 </span>
               </td>
               <td

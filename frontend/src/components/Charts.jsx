@@ -12,15 +12,17 @@ import {
   Cell,
   Sector,
 } from 'recharts';
-import { MONTH_NAMES, CATEGORY_COLORS, formatCurrency } from '../utils/constants';
+import { CATEGORY_COLORS, formatCurrency } from '../utils/constants';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // ─── Income vs Expense Bar Chart ─────────────────────────────────────────────
 export function MonthlyBarChart({ monthlyTrend }) {
+  const { t } = useTranslation();
   // Transform aggregated data into recharts format
   const dataMap = {};
   (monthlyTrend || []).forEach(({ _id, total }) => {
-    const key = `${MONTH_NAMES[_id.month - 1]} '${String(_id.year).slice(2)}`;
+    const key = `${t(`dashboard.months.${_id.month}`)} '${String(_id.year).slice(2)}`;
     if (!dataMap[key]) dataMap[key] = { month: key, income: 0, expense: 0 };
     dataMap[key][_id.type] = total;
   });
@@ -42,7 +44,7 @@ export function MonthlyBarChart({ monthlyTrend }) {
           <p style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{label}</p>
           {payload.map((p) => (
             <p key={p.dataKey} style={{ color: p.fill, marginBottom: '0.2rem' }}>
-              {p.dataKey.charAt(0).toUpperCase() + p.dataKey.slice(1)}: {formatCurrency(p.value)}
+              {t(`charts.${p.dataKey}`, p.dataKey)}: {formatCurrency(p.value)}
             </p>
           ))}
         </div>
@@ -71,7 +73,7 @@ export function MonthlyBarChart({ monthlyTrend }) {
         <Legend
           formatter={(value) => (
             <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-              {value.charAt(0).toUpperCase() + value.slice(1)}
+              {t(`charts.${value}`, value)}
             </span>
           )}
         />
@@ -103,6 +105,7 @@ const renderActiveShape = (props) => {
 };
 
 export function CategoryPieChart({ categoryBreakdown }) {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const data = (categoryBreakdown || []).map((item) => ({
@@ -123,7 +126,7 @@ export function CategoryPieChart({ categoryBreakdown }) {
           fontSize: '0.875rem',
         }}
       >
-        No expense data for this month
+        {t('charts.noExpenseData')}
       </div>
     );
   }

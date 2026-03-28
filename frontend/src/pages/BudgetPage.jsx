@@ -4,8 +4,10 @@ import BudgetForm from '../components/BudgetForm';
 import { formatCurrency, CATEGORY_COLORS, formatMonth } from '../utils/constants';
 import { Plus, Trash2, AlertTriangle, CheckCircle, Target } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function BudgetPage() {
+  const { t } = useTranslation();
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -18,7 +20,7 @@ export default function BudgetPage() {
       const { data } = await budgetAPI.getAll({ month, year });
       setBudgets(data.data);
     } catch {
-      toast.error('Failed to load budgets');
+      toast.error(t('budget.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -29,17 +31,20 @@ export default function BudgetPage() {
   }, [fetchBudgets]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this budget?')) return;
+    if (!window.confirm(t('budget.deleteConfirm'))) return;
     try {
       await budgetAPI.delete(id);
-      toast.success('Budget deleted');
+      toast.success(t('budget.deleteSuccess'));
       fetchBudgets();
     } catch {
-      toast.error('Failed to delete');
+      toast.error(t('budget.deleteFailed'));
     }
   };
 
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const months = [
+    t('dashboard.months.1'), t('dashboard.months.2'), t('dashboard.months.3'), t('dashboard.months.4'), t('dashboard.months.5'), t('dashboard.months.6'),
+    t('dashboard.months.7'), t('dashboard.months.8'), t('dashboard.months.9'), t('dashboard.months.10'), t('dashboard.months.11'), t('dashboard.months.12'),
+  ];
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
   // Count alerts
@@ -51,9 +56,9 @@ export default function BudgetPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>Budget Planner</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>{t('budget.title')}</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-            Manage spending limits by category
+            {t('budget.subtitle')}
           </p>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -75,7 +80,7 @@ export default function BudgetPage() {
           </select>
           <button onClick={() => setShowForm(true)} className="btn-primary" id="add-budget-btn">
             <Plus size={16} />
-            Add Budget
+            {t('budget.addBudget')}
           </button>
         </div>
       </div>
@@ -97,9 +102,9 @@ export default function BudgetPage() {
           }}
         >
           <AlertTriangle size={18} />
-          <strong>{alertCount} budget{alertCount > 1 ? 's' : ''} exceeded!</strong>
+          <strong>{t('budget.alertExceeded', { count: alertCount })}</strong>
           <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-            You've gone over your spending limit for {alertCount} {alertCount > 1 ? 'categories' : 'category'}.
+            {t('budget.alertExceededDesc', { count: alertCount })}
           </span>
         </div>
       )}
@@ -120,9 +125,9 @@ export default function BudgetPage() {
           }}
         >
           <AlertTriangle size={18} />
-          <strong>{warningCount} budget{warningCount > 1 ? 's' : ''} approaching limit</strong>
+          <strong>{t('budget.warningApproaching', { count: warningCount })}</strong>
           <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-            You've used 80%+ of your budget in {warningCount} {warningCount > 1 ? 'categories' : 'category'}.
+            {t('budget.warningApproachingDesc', { count: warningCount })}
           </span>
         </div>
       )}
@@ -130,7 +135,7 @@ export default function BudgetPage() {
       {/* Budget cards */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
-          Loading budgets...
+          {t('budget.loading')}
         </div>
       ) : budgets.length === 0 ? (
         <div
@@ -139,9 +144,9 @@ export default function BudgetPage() {
         >
           <Target size={48} color="var(--border)" style={{ margin: '0 auto 1rem' }} />
           <p style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-            No budgets set for {months[month - 1]} {year}
+            {t('budget.noData')} {months[month - 1]} {year}
           </p>
-          <p style={{ fontSize: '0.875rem' }}>Create a budget to start tracking your spending limits</p>
+          <p style={{ fontSize: '0.875rem' }}>{t('budget.noDataDesc')}</p>
         </div>
       ) : (
         <div
@@ -198,7 +203,7 @@ export default function BudgetPage() {
                 <div style={{ marginBottom: '1rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '0.4rem' }}>
                     <span style={{ color: 'var(--text-secondary)' }}>
-                      {formatCurrency(budget.spent)} spent
+                      {formatCurrency(budget.spent)} {t('budget.spentStr')}
                     </span>
                     <span style={{ fontWeight: 600, color }}>
                       {budget.percentage}%
@@ -218,12 +223,12 @@ export default function BudgetPage() {
                 {/* Amounts */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
                   <div>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '0.15rem' }}>Limit</p>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '0.15rem' }}>{t('budget.limitStr')}</p>
                     <p style={{ fontWeight: 700 }}>{formatCurrency(budget.limit)}</p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '0.15rem' }}>
-                      {budget.remaining >= 0 ? 'Remaining' : 'Over by'}
+                      {budget.remaining >= 0 ? t('budget.remaining') : t('budget.overBy')}
                     </p>
                     <p style={{ fontWeight: 700, color }}>
                       {formatCurrency(Math.abs(budget.remaining))}
@@ -248,7 +253,7 @@ export default function BudgetPage() {
                     }}
                   >
                     <AlertTriangle size={12} />
-                    Budget exceeded!
+                    {t('budget.statusExceeded')}
                   </div>
                 )}
                 {budget.warning && !budget.alert && (
@@ -267,7 +272,7 @@ export default function BudgetPage() {
                     }}
                   >
                     <AlertTriangle size={12} />
-                    Approaching limit
+                    {t('budget.statusApproaching')}
                   </div>
                 )}
                 {!budget.alert && !budget.warning && (
@@ -286,7 +291,7 @@ export default function BudgetPage() {
                     }}
                   >
                     <CheckCircle size={12} />
-                    On track
+                    {t('budget.statusOnTrack')}
                   </div>
                 )}
               </div>
