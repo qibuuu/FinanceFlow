@@ -84,11 +84,11 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {/* Type toggle */}
           <div style={{ display: 'flex', gap: '0.5rem', padding: '0.25rem', background: 'var(--bg-primary)', borderRadius: '10px' }}>
-            {['expense', 'income'].map((t) => (
+            {['expense', 'income'].map((typeOption) => (
               <button
-                key={t}
+                key={typeOption}
                 type="button"
-                onClick={() => setForm((prev) => ({ ...prev, type: t, category: '' }))}
+                onClick={() => setForm((prev) => ({ ...prev, type: typeOption, category: '' }))}
                 style={{
                   flex: 1,
                   padding: '0.5rem',
@@ -99,20 +99,20 @@ export default function TransactionForm({ onClose, onSuccess, editData }) {
                   fontSize: '0.875rem',
                   transition: 'all 0.2s',
                   background:
-                    form.type === t
-                      ? t === 'income'
+                    form.type === typeOption
+                      ? typeOption === 'income'
                         ? 'rgba(16,185,129,0.2)'
                         : 'rgba(239,68,68,0.2)'
                       : 'transparent',
                   color:
-                    form.type === t
-                      ? t === 'income'
+                    form.type === typeOption
+                      ? typeOption === 'income'
                         ? '#10b981'
                         : '#ef4444'
                       : 'var(--text-secondary)',
                 }}
               >
-                {t('transaction.' + t, t.charAt(0).toUpperCase() + t.slice(1))}
+                {t('transaction.' + typeOption, typeOption.charAt(0).toUpperCase() + typeOption.slice(1))}
               </button>
             ))}
           </div>

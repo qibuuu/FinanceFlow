@@ -57,9 +57,9 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
           </tr>
         </thead>
         <tbody>
-          {transactions.map((t) => (
+          {transactions.map((txn) => (
             <tr
-              key={t._id}
+              key={txn._id}
               style={{
                 borderBottom: '1px solid var(--border)',
                 transition: 'background 0.15s',
@@ -68,7 +68,7 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
               onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             >
               <td style={{ padding: '0.875rem 1rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
-                {formatDate(t.date)}
+                {formatDate(txn.date)}
               </td>
               <td style={{ padding: '0.875rem 1rem', maxWidth: '200px' }}>
                 <span
@@ -80,7 +80,7 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
                     color: 'var(--text-primary)',
                   }}
                 >
-                  {t.description || '—'}
+                  {txn.description || '—'}
                 </span>
               </td>
               <td style={{ padding: '0.875rem 1rem' }}>
@@ -93,16 +93,16 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
                     borderRadius: '20px',
                     fontSize: '0.75rem',
                     fontWeight: 600,
-                    background: `${CATEGORY_COLORS[t.category] || '#94a3b8'}22`,
-                    color: CATEGORY_COLORS[t.category] || '#94a3b8',
+                    background: `${CATEGORY_COLORS[txn.category] || '#94a3b8'}22`,
+                    color: CATEGORY_COLORS[txn.category] || '#94a3b8',
                   }}
                 >
-                  {t('category.' + t.category, t.category)}
+                  {t('category.' + txn.category, txn.category)}
                 </span>
               </td>
               <td style={{ padding: '0.875rem 1rem' }}>
-                <span className={`badge badge-${t.type}`}>
-                  {t('transaction.' + t.type)}
+                <span className={`badge badge-${txn.type}`}>
+                  {t('transaction.' + txn.type)}
                 </span>
               </td>
               <td
@@ -110,16 +110,16 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
                   padding: '0.875rem 1rem',
                   textAlign: 'right',
                   fontWeight: 700,
-                  color: t.type === 'income' ? '#10b981' : '#ef4444',
+                  color: txn.type === 'income' ? '#10b981' : '#ef4444',
                   whiteSpace: 'nowrap',
                 }}
               >
-                {t.type === 'income' ? '+' : '-'}{formatCurrency(t.amount)}
+                {txn.type === 'income' ? '+' : '-'}{formatCurrency(txn.amount)}
               </td>
               <td style={{ padding: '0.875rem 1rem', textAlign: 'right' }}>
                 <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'flex-end' }}>
                   <button
-                    onClick={() => onEdit(t)}
+                    onClick={() => onEdit(txn)}
                     className="btn-ghost"
                     style={{ padding: '0.35rem 0.6rem' }}
                     title="Edit"
@@ -127,7 +127,7 @@ export default function TransactionTable({ transactions, onEdit, onDelete, loadi
                     <Pencil size={14} />
                   </button>
                   <button
-                    onClick={() => onDelete(t._id)}
+                    onClick={() => onDelete(txn._id)}
                     className="btn-danger"
                     style={{ padding: '0.35rem 0.6rem' }}
                     title="Delete"
